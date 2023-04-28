@@ -5,7 +5,7 @@
 // Service의 리턴값
 return res.status(200).json({ message: "메세지" });
 ```
-Controller에서 받아오지 못함   
+Service에서 받아오지 못함   
 이유? Service에는 res가 없어서 실행 자체가 안됨
 ## Issue 1 해결방안 )
 ``` javascript
