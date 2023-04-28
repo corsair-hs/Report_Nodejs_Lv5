@@ -22,4 +22,4 @@ if (num === 200) {
 ```
 Service에서 객체의 형태로   
 num에는 response status 번호를, msg에는 출력하고자 하는 message를 담아서 Controller로 보낸다.   
-Controller는 객체로 넘어온 아이를 구조분해할당으로 받아서 num로서 200과 나머지를 분개하여 msg를 출력한다.
+Controller는 객체로 넘어온 아이를 구조분해할당으로 받아서 num을 200과 나머지로 분개하여 msg를 출력한다.
