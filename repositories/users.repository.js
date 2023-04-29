@@ -13,6 +13,11 @@ class UsersRepository {
   getUserWithNickname = async ( nickname ) => {
     return await Users.findOne({ where: { nickname } });
   };
+
+  // userId로 회원 찾기
+  getUserWithUserId = async ( userId ) => {
+    return await Users.findOne({ where: { userId } });
+  }
 };
 
 module.exports = UsersRepository;
