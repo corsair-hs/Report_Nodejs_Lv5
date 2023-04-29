@@ -3,10 +3,13 @@
 const express = require('express');
 const router = express.Router();
 
-// const UsersController = require('../controllers/users.controller.js');
-// const usersController = new UsersController();
+const authMiddleware = require("../middlewares/auth-middleware");
+const CommentsController = require('../controllers/comments.controller.js');
+const commentsController = new CommentsController();
 
-// router.post("/signup", usersController.signup);  // 회원가입
-// router.post("/login", usersController.login); // 로그인
+router.post("/posts/:postId/comments", authMiddleware, commentsController.addCmtOne);  // 댓글 생성
+// router.post("/posts/:postId/comments", commentsController.getCmts);  // 댓글 조회
+// router.post("/posts/:postId/comments/:commentId", authMiddleware, commentsController.updateCmtOne);  // 댓글 수정
+// router.post("/posts/:postId/comments/:commentId", authMiddleware, commentsController.deleteCmtOne);  // 댓글 제거
 
 module.exports = router;
