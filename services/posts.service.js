@@ -37,7 +37,7 @@ class PostsService {
   getPostOne = async ( postId ) => {
     try {
       const data = await this.postsRepository.getPostOne( postId );
-      return { num: 200, msg: data };
+      return { num: 200, msg: data }; 
     } catch (err) {
       console.error(err);
       return { num: 400, msg: "게시글 조회에 실패하였습니다."}
