@@ -1,17 +1,18 @@
 // Method -> DB Query -> Response Data to Service
 
 const { Users, Posts } = require("../models");
+const { Op } = require("sequelize");
 
 class PostsRepository {
 
   // 게시글 추가
-  addUser = async (userId, title, content) => {
+  addPostOne = async (userId, title, content) => {
     return await Posts.create({ UserId: userId, title, content });
   };
 
   // 게시글 조회
   getPosts = async () => {
-    getPostsData = await Posts.findAll({
+    const getPostsData = await Posts.findAll({
       attributes: ["postId", "UserId", "title", "createdAt", "updatedAt"],
       include: [
         {
@@ -22,7 +23,7 @@ class PostsRepository {
       order: [['createdAt', 'DESC']],
     });
 
-    setPostsData = getPostsData.map((item) => {
+    const setPostsData = getPostsData.map((item) => {
       return {
         postId: item.postId,
         userId: item.UserId,
@@ -38,7 +39,7 @@ class PostsRepository {
 
   // 게시글 상세 조회
   getPostOne = async (postId) => {
-    getPostOneData = await Posts.findOne({
+    const getPostOneData = await Posts.findOne({
       attributes: ["postId", "UserId", "title", "content", "createdAt", "updatedAt"],
       include: [
         {
@@ -49,7 +50,7 @@ class PostsRepository {
       where: { postId }
     });
 
-    setPostOneData = {
+    const setPostOneData = {
       postId: getPostOneData.postId,
       userId: getPostOneData.UserId,
       nickname: getPostOneData.User.nickname,

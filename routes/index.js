@@ -7,8 +7,8 @@ const CommentsRouter = require('./comments.route.js');
 const LikesRouter = require('./likes.route.js');
 
 router.use('/', UsersRouter);
-router.use('/posts', PostsRouter);
-router.use('/posts', CommentsRouter);
-router.use('/posts', LikesRouter);
+router.use('/', PostsRouter);
+router.use('/', CommentsRouter);
+router.use('/', LikesRouter);
 
 module.exports = router;

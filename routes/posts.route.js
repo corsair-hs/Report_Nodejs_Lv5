@@ -3,10 +3,14 @@
 const express = require('express');
 const router = express.Router();
 
-// const UsersController = require('../controllers/users.controller.js');
-// const usersController = new UsersController();
+const authMiddleware = require("../middlewares/auth-middleware");
+const PostsController = require('../controllers/posts.controller.js');
+const postsController = new PostsController();
 
-// router.post("/signup", usersController.signup);  // 회원가입
-// router.post("/login", usersController.login); // 로그인
+router.post("/posts", authMiddleware, postsController.addPostOne);  // 게시글 생성
+router.get("/posts", postsController.getPosts); // 게시글 조회
+router.get("/posts/:postId", postsController.getPostOne); // 게시글 상세조회
+router.put("/posts/:postId", authMiddleware, postsController.updatePostOne); // 게시글 수정
+router.delete("/posts/:postId", authMiddleware, postsController.deletePostOne); // 게시글 삭제
 
 module.exports = router;
