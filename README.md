@@ -12,11 +12,10 @@ Service에서 받아오지 못함
 // Service to Controller
 return { num: 401, msg: "메세지" };
 // Controller from Service
-const { num, msg, err } = await this.usersService.method(x, y, z);
+const { num, msg } = await this.usersService.method(x, y, z);
 if (num === 200) {
   return res.status(num).json({ message: msg });
 } else {
-  console.error(err);
   return res.status(num).json({ errorMessage: msg });
 }
 ```
