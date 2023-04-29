@@ -12,12 +12,11 @@ class UsersController {
 
       const { nickname, password, confirm } = req.body;
       
-      const { num, msg, err } = await this.usersService.signup(nickname, password, confirm);
+      const { num, msg } = await this.usersService.signup(nickname, password, confirm);
       
       if (num === 200) {
         return res.status(num).json({ message: msg });
       } else {
-        console.error(err);
         return res.status(num).json({ errorMessage: msg });
       }
 
@@ -36,13 +35,12 @@ class UsersController {
 
       const { nickname, password } = req.body;
 
-      const { num, msg, err } = await this.usersService.login(nickname, password);
+      const { num, msg } = await this.usersService.login(nickname, password);
       
       if (num === 200) {
         res.cookie("authorization", `Bearer ${msg}`); // msg: token
         return res.status(num).json({ token: msg });
       } else {
-        console.error(err);
         return res.status(num).json({ errorMessage: msg });
       }
 
