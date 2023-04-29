@@ -1,6 +1,6 @@
 // Method -> DB Query -> Response Data to Service
 
-const { Comments } = require("../models");
+const { Comments, Users } = require("../models");
 const { Op } = require("sequelize");
 
 class CommentsRepository {
@@ -11,7 +11,7 @@ class CommentsRepository {
   }
 
   // 댓글 조회
-  getCmts = async () => {
+  getCmts = async (postId) => {
     const getCmtsData = await Comments.findAll({
       include: [
         {
@@ -37,8 +37,34 @@ class CommentsRepository {
     return setCmtsData;
   };
 
+  // 댓글 조회 (with commentId)
+  getCmtOne = async (commentId) => {
+    const getCmtOneData = await Comments.findOne({
+      include: [
+        {
+          model: Users,
+          attributes: ["nickname"]
+        }
+      ],
+      where: { commentId },
+      order: [['createdAt', 'DESC']],
+    });
+
+    const setCmtOneData = {
+      commentId: getCmtOneData.commentId,
+      postId: getCmtOneData.PostId,
+      userId: getCmtOneData.UserId,
+      nickname: getCmtOneData.User.nickname,
+      comment: getCmtOneData.comment,
+      createdAt: getCmtOneData.createdAt,
+      updatedAt: getCmtOneData.updatedAt
+    };
+
+    return setCmtOneData;
+  };
+
   // 댓글 수정
-  updateCmtOne = async ( userId, postId, commentId, comment ) => {
+  updateCmtOne = async (userId, postId, commentId, comment) => {
     return await Comments.update(
       { comment },
       {
@@ -50,7 +76,7 @@ class CommentsRepository {
   };
 
   // 댓글 삭제
-  deleteCmtOne = async ( userId, postId, commentId ) => {
+  deleteCmtOne = async (userId, postId, commentId) => {
     return await Comments.destroy(
       {
         where: {
