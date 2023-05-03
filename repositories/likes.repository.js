@@ -21,17 +21,20 @@ class LikesRepository {
 
   // 좋아요 게시글 조회
   getPostsWithLikes = async ( userId ) => {
-    const getPostsWithLikes = await Likes.findAll({
-      attributes: [
-        ['PostId', 'postId'], 
-        ['UserId', 'userId'], 
-        [sequelize.literal('(SELECT nickname FROM Users WHERE Users.userId = (SELECT UserId FROM Posts WHERE Posts.postId = Likes.PostId))'), 'nickname'],
-        [sequelize.literal('(SELECT title FROM Posts WHERE Posts.postId = Likes.PostId)'), 'title'],
-        'createdAt', 
-        'updatedAt',
-        [sequelize.fn('COUNT', sequelize.col('PostId')), 'like'],
+    const getPostsWithLikes = await Posts.findAll({
+      attributes: ['postId', 'title', 'createdAt', 'updatedAt'],
+      include: [
+        {
+          model: Users,
+          attributes: ['userId', 'nickname']
+        },
+        {
+          model: Likes,
+          attributes: [[sequelize.fn('COUNT', sequelize.col('Likes.PostId')), 'count']]
+        } 
       ],
-      group: ['PostId'],
+      group: ['postId'],
+      order: [['createdAt', 'DESC']],
     });
 
     return getPostsWithLikes;
