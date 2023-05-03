@@ -31,7 +31,20 @@ class LikesService {
   viewLike = async () => {
     try {
       const getPostsWithLikes = await this.likesRepository.getPostsWithLikes();
-      return { num: 200, msg: getPostsWithLikes };
+
+      const setPostsWithLikes = getPostsWithLikes.map((item)=>{
+        return {
+          postId: item.postId,
+          userId: item.User.userId,
+          nickname: item.User.nickname,
+          title: item.title,
+          like: item.Likes[0].dataValues.count,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt
+        }
+      });
+
+      return { num: 200, msg: setPostsWithLikes };
     } catch (err) {
       console.error(err);
       return { num: 400, msg: "좋아요 게시글 조회에 실패하였습니다." };
