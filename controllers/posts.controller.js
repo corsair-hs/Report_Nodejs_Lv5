@@ -8,13 +8,21 @@ class PostsController {
   // 게시글 생성
   addPostOne = async (req, res) => {
     try {
+      // 입력 데이터
       const { userId } = res.locals.user;
       const { title, content } = req.body;
-      const { num, msg } = await this.postsService.addPostOne(userId, title, content);
-      if (num === 200) {
-        return res.status(num).json({ message: msg });
-      } else {
-        return res.status(num).json({ errorMessage: msg });
+      // 예외처리
+      if (!title) {
+        return res.status(412).json({ errorMessage: "게시글 제목의 형식이 일치하지 않습니다."});
+      } else if (!content) {
+        return res.status(412).json({ errorMessage: "게시글 내용의 형식이 일치하지 않습니다." });
+      };
+      // 게시글 생성
+      const { message, errorMessage } = await this.postsService.addPostOne(userId, title, content);
+      if (message) {
+        return res.status(200).json({ message });
+      } else if (errorMessage) {
+        return res.status(400).json({ errorMessage });
       }
     } catch (err) {
       console.error(err);
@@ -24,11 +32,11 @@ class PostsController {
 
   // 게시글 조회
   getPosts = async (req, res) => {
-    const { num, msg } = await this.postsService.getPosts();
-    if (num === 200) {
-      return res.status(num).json({ posts: msg });
-    } else {
-      return res.status(num).json({ errorMessage: msg });
+    const { posts, errorMessage } = await this.postsService.getPosts();
+    if (posts) {
+      return res.status(200).json({ posts });
+    } else if (errorMessage) {
+      return res.status(400).json({ errorMessage });
     };
   };
 
@@ -36,11 +44,11 @@ class PostsController {
   getPostOne = async (req, res) => {
     try {
       const { postId } = req.params;
-      const { num, msg } = await this.postsService.getPostOne(postId);
-      if (num === 200) {
-        return res.status(num).json({ post: msg });
-      } else {
-        return res.status(num).json({ errorMessage: msg });
+      const { post, errorMessage } = await this.postsService.getPostOne(postId);
+      if (post) {
+        return res.status(200).json({ post });
+      } else if (errorMessage) {
+        return res.status(400).json({ errorMessage });
       };
     } catch (err) {
       console.error(err);
@@ -51,14 +59,23 @@ class PostsController {
   // 게시글 수정
   updatePostOne = async (req, res) => {
     try {
+      // 입력 데이터
       const { userId } = res.locals.user;
       const { postId } = req.params;
       const { title, content } = req.body;
-      const { num, msg } = await this.postsService.updatePostOne(postId, userId, title, content);
-      if (num === 200) {
-        return res.status(num).json({ message: msg });
-      } else {
-        return res.status(num).json({ errorMessage: msg });
+      // 예외처리
+      // - 입력 데이터 예외처리
+      if (!title) {
+        return res.status(412).json({ errorMessage: "게시글 제목의 형식이 일치하지 않습니다." });
+      } else if (!content) {
+        return res.status(412).json({ errorMessage: "게시글 내용의 형식이 일치하지 않습니다." });
+      };
+      // 수정처리요청
+      const { message, errorMessage } = await this.postsService.updatePostOne(postId, userId, title, content);
+      if (message) {
+        return res.status(200).json({ message });
+      } else if (errorMessage) {
+        return res.status(400).json({ errorMessage });
       };
     } catch (err) {
       console.error(err);
@@ -71,11 +88,11 @@ class PostsController {
     try {
       const { userId } = res.locals.user;
       const { postId } = req.params;
-      const { num, msg } = await this.postsService.deletePostOne( postId, userId );
-      if (num === 200) {
-        return res.status(num).json({ message: msg });
-      } else {
-        return res.status(num).json({ errorMessage: msg });
+      const { message, errorMessage } = await this.postsService.deletePostOne( postId, userId );
+      if (message) {
+        return res.status(200).json({ message });
+      } else if (errorMessage) {
+        return res.status(400).json({ errorMessage });
       };
     } catch (err) {
       console.error(err);
